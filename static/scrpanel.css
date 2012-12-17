@@ -1,0 +1,174 @@
+* {
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    font-family: "Trebuchet MS", monospace;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    border-bottom: 1px dashed;
+    color: #0000cd;
+}
+
+a:after {
+}
+
+a:hover {
+    border-bottom: 1px solid;
+    background-color: #e0ffff;
+}
+
+body {
+    background-color: #d6ddde;
+}
+#container      {
+    width: 800px;
+    height: 400px;
+    left: 10px;
+    top:    10px;
+    padding: 5px 10px 40px;
+    background-color: #f0f0f0;
+}
+#title          {
+    text-align: center;
+    padding: 0 5px 5px;
+}
+#scr_set        {
+    width: 100%;
+    height: 100%;
+}
+.scr            {
+    width: 33%;
+    height: 33%;
+    border-collapse: collapse;
+    background-color: #636363;
+    vertical-align: top;
+}
+.scr_title {
+    height: 16px;
+    font-size: 11pt;
+    color: #ffffff;
+    padding-left: 10px;
+    margin: 2px 2px 0;
+    padding-bottom: 2px;
+}
+.scr_title:hover {
+    background-color: #d3d6d4;
+    color: #000000;
+    text-shadow: #ffffff;
+}
+
+.vp_set {
+    width: 100%;
+    height: 100%;
+}
+.vp>p {
+    width: 1px;
+    height: 1px;
+}
+.vp {
+    background-color: #b3b3b3;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 10pt;
+}
+.vp:hover {
+    background-color: #d3d6d4;
+}
+.vp.open {
+    background-color: #ffffff;
+
+}
+.vp.play {
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.lv {
+    width: 150px;
+    height: 105px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    border: 1px solid #ffffff;
+    padding: 2px;
+}
+.lv:hover {
+    border-color: #000000;
+}
+.lv01 {background-image: url("/static/lv01.png");}
+.lv04 {background-image: url("/static/lv04.png");}
+.lv06 {background-image: url("/static/lv06.png");}
+.lv07 {background-image: url("/static/lv07.png");}
+.lv08 {background-image: url("/static/lv08.png");}
+.lv09 {background-image: url("/static/lv09.png");}
+.lv10 {background-image: url("/static/lv10.png");}
+.lv13 {background-image: url("/static/lv13.png");}
+.lv16 {background-image: url("/static/lv16.png");}
+
+.ddmenu {
+    display: none;
+    position: absolute;
+    font-size: 10pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+}
+.ddmenu.open {
+    display: block;
+    background-color: #ffffff;
+    padding: 5px;
+    margin: 2px;
+}
+.vs_item[title="---"] {
+    color: #7a7a7a;
+}
+.vs_item_ptz {
+    color: blue;
+}
+
+.vs_item:hover {
+    background-color: #4a5e6e;
+    color: #ffffff;
+}
+#lvariants_dialog {
+    display: none;
+}
+
+input {
+    cursor: text;
+    width: 100%;
+}
+
+.vs_del {
+    color: #adadad;
+}
+
+.vs_del:hover {
+    color: #000000;
+}
+
+.vs_title {
+    border-bottom: 1px dashed;
+}
+
+.vs_title:hover {
+    border-bottom: 1px solid;
+    font-weight: bold;
+    /*cursor: pointer;*/
+}
+
+.vs_add {
+    color: green;
+    cursor: pointer;
+}
+
+.vsources_add_dialog {
+    display: none;
+}

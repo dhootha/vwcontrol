@@ -1,0 +1,10 @@
+<table style="width: 100%;">
+    {% for vsrc in vsconfig %}
+    <tr >
+        <td class="vs_alias" style="display: none;">{{ vsrc }}</td>
+        <td class="vs_title">{{ vsconfig[vsrc].title }}</td>
+        <td class="vs_del">x</td>
+    </tr>
+    {% endfor %}
+    <tr><td class="vs_add">добавить...</td></tr>
+</table>

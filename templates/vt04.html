@@ -1,0 +1,37 @@
+<table style="width:100%; height: 100%; border-collapse: collapse;">
+    <tr style="height: 16px;"><td><div class="scr_title"></div></td></tr>
+    <tr>
+        <td>
+            <table class="vp_set">
+                <tr style="height: 50%;">
+                    <td style="width:50%;"><div class="vp {{ st.vt04_01 }}" id="vt04_01"><p>
+                        {% if lnk.vt04_01 %}
+                        <a href="{{ lnk.vt04_01 }}" target="_blank">{{ lbl.vt04_01 }}</a>
+                        {% else %}
+                        {{ lbl.vt04_01 }}
+                        {% endif %}</p></div></td>
+                    <td style="width:50%;"><div class="vp {{ st.vt04_02 }}" id="vt04_02"><p>
+                        {% if lnk.vt04_02 %}
+                        <a href="{{ lnk.vt04_02 }}" target="_blank">{{ lbl.vt04_02 }}</a>
+                        {% else %}
+                        {{ lbl.vt04_02 }}
+                        {% endif %}</p></div></td>
+                </tr>
+                <tr style="height: 50%;">
+                    <td style="width:50%;"><div class="vp {{ st.vt04_03 }}" id="vt04_03"><p>
+                        {% if lnk.vt04_03 %}
+                        <a href="{{ lnk.vt04_03 }}" target="_blank">{{ lbl.vt04_03 }}</a>
+                        {% else %}
+                        {{ lbl.vt04_03 }}
+                        {% endif %}</p></div></td>
+                    <td style="width:50%;"><div class="vp {{ st.vt04_04 }}" id="vt04_04"><p>
+                        {% if lnk.vt04_04 %}
+                        <a href="{{ lnk.vt04_04 }}" target="_blank">{{ lbl.vt04_04 }}</a>
+                        {% else %}
+                        {{ lbl.vt04_04 }}
+                        {% endif %}</p></div></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

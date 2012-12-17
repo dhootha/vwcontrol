@@ -1,0 +1,6 @@
+<div class="vs_list">
+    <div title="---" class="vs_item">-- пусто --</div>
+{% for vsrc in vs %}
+    <div title="{{ vsrc.title }}" class="vs_item" id="{{ vsrc.ptzlink }}">{{ vsrc.name }}</div>
+{% endfor %}
+</div>

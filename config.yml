@@ -1,0 +1,32 @@
+screens:
+  scr11:
+    ip: 192.168.28.116
+    vports: {}
+    vt_type: vt01
+  scr12:
+    ip: 192.168.28.32
+    vports: {}
+    vt_type: vt01
+  scr13:
+    ip: 192.168.28.33
+    vports: {}
+    vt_type: vt01
+  scr21:
+    ip: 192.168.28.34
+    vports: {}
+    vt_type: vt01
+  scr22:
+    ip: 192.168.28.35
+    vports: {}
+    vt_type: vt01
+  scr23:
+    ip: 192.168.28.36
+    vports: {}
+    vt_type: vt01
+vsources:
+  express: {addr: 'rtsp://192.168.44.135', title: "\u042D\u043A\u0441\u043F\u0440\u0435\
+      \u0441\u0441"}
+  panta: {addr: 'rtsp://192.168.32.212', title: "\u041F\u0410\u041D\u0422\
+      \u0410"}
+  square: {addr: 'rtsp://192.168.32.132', title: "\u041F\u043B\u043E\u0449\u0430\u0434\
+      \u044C"}

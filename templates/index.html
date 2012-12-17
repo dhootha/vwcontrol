@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Контроль видеостены</title>
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link type="text/css" rel="stylesheet" media="screen" href="/static/jq-ui.css">
+    <link type="text/css" rel="stylesheet" media="screen" href="/static/scrpanel.css">
+    <script type="text/javascript" src="/static/jq.js"></script>
+    <script type="text/javascript" src="/static/jq-ui-custom.js"></script>
+    <script type="text/javascript">
+        function isIP(txt) {
+            // IPv4 IP Address 1
+            var re1='((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?![\\d])';
+            var p = new RegExp(re1,["i"]);
+            var m = p.exec(txt);
+            return(m);
+        }
+        $(function(){
+            var $srv = document.URL;
+            var $srvs = [];
+            var $srvscr = "{{ SELF }}";
+            jQuery.get($srv+'conf/',null, function(data){
+                for (var scr in data['screens']) {
+                    $srvs.push('http://'+ data['screens'][scr]['ip']+':8008/');
+                }
+            });
+            $('#container').resizable({minWidth:350, minHeight:200});
+            $('.scr').before(function(){
+                var tid = $(this).attr('id');
+                var ttle = $(this).attr('title');
+
+                jQuery.get($srv+"layout/"+tid,{'srv':$srvscr},function(data){
+                    var curId = $('#'+tid);
+                    curId.html(data);
+                    curId.find('.scr_title').append(ttle)
+                })
+            });
+
+            var $curscrid;
+            var $curscrtitle;
+            var $curvpid;
+            var $vp_active;
+
+            $('.scr_title').live('click',function(){
+                $curscrtitle    = $(this).closest('.scr').attr('title');
+                $curscrid       = $(this).closest('.scr').attr('id');
+                $('#lvariants_dialog').dialog({
+                    title: 'Выбор разметки: ' + $curscrtitle,
+                    width: 510,
+                    height:400,
+                    position: [20, 20],
+                    modal: true,
+                    resizable: false
+                })
+            });
+
+            $('.lv').live('click', function(){
+                $('#lvariants_dialog').dialog('close');
+                for (var $scrip in $srvs) {
+                    $('#'+$curscrid).empty();
+                    $.post($srvs[$scrip]+"layout/"+$curscrid,
+                            {'vt_type':$(this).attr('title'), 'srv':$srvscr},
+                            function(data){
+                                var curId = $('#'+$curscrid);
+                                curId.append(data);
+                                curId.find('.scr_title').append($curscrtitle)
+                    })
+                }
+            });
+
+            $('.vp').live('click', function(e){
+                $curscrtitle    = $(this).closest('.scr').attr('title');
+                $curscrid       = $(this).closest('.scr').attr('id');
+                $curvpid        = $(this).attr('id');
+                var $th = $(this);
+                $vp_active = $th;
+                $th.addClass('open');
+                //noinspection JSCheckFunctionSignatures
+                $('.vp_menu').load($srv+"setvpsrc/"+$curscrid)
+                        .toggleClass('open')
+                        .position({
+                            of: $th,
+                            at: 'left bottom',
+                            my: 'left top'
+                        });
+                $(document).mouseup(function(e) {
+                    $(".vp_menu").removeClass('open');
+                    $th.removeClass('open');
+                })
+            });
+            $('.vs_item').live('click', function(){
+                var $th = $(this);
+                for (var $scrip in $srvs) {
+                    $.post($srvs[$scrip]+"setvpsrc/"+$curscrid,{
+                        'vpid':$curvpid,
+                        'srcalias':$(this).attr('title'),
+                        'screxe':$curscrid
+                    });
+                }
+                if ($th.attr('title') != '---') {
+                    if (!$vp_active.hasClass('play')) {
+                        $vp_active.addClass('play')
+                    }
+                    if ($th.attr('id')) {
+                        $vp_active
+                            .find('p')
+                            .html('<a href="'+$th.attr('id')+'" target="_blank">'+$th.text()+'</a>')
+                    } else {
+                        $vp_active
+                            .find('p')
+                            .text($th.text())
+                    }
+                } else {
+                    $vp_active.removeClass('play');
+                    $vp_active.empty()
+                }
+                $('.vp_menu').removeClass('open')
+            });
+            $('.play').live('click',function(){
+                $(this).closest('.vs_list').append('<p class="vs_item_ptz">[ ptz ]</p>')
+            });
+            $('#shutdown').click(function(){
+                if (confirm('Будут выключены все дисплеи \n(включение только физически)')) {
+                    for (var $scrip in $srvs) {
+                        $.post($srvs[$scrip]+"shutdown/")
+                    }
+                }
+            });
+            $('#vsources').click(function(e){
+                var vsources_dialog = $('.vsources_dialog');
+                vsources_dialog.load($srv+"vsources/");
+                vsources_dialog.dialog({
+                    title: 'Источники видео',
+                    modal: true,
+                    resizable: false,
+                    width: 200,
+//                    height: 200,
+                    position: [e.pageX-200, e.pageY]
+                })
+            });
+            $('.vs_del').live('click',function(){
+                var $curvsid = $(this).parent().find('.vs_alias').text();
+                var $curvsnm = $(this).parent().find('.vs_title').text();
+                if (confirm('Удалить "'+$curvsnm+'"?')) {
+                    for (var $scrip in $srvs) {
+                        $.post($srvs[$scrip]+"vsources/"+$curvsid+'/del');
+                    }
+                }
+                $('.vsources_dialog').load($srv+"vsources/");
+            });
+            $('.vs_add').live('click',function(){
+                var vsources_add_dialog = $('.vsources_add_dialog');
+                vsources_add_dialog.find('input').val('');
+                vsources_add_dialog.dialog({
+                    title: 'добавление источника видео',
+                    modal: true,
+                    maxHeight: 170,
+                    minHeight: 170,
+                    maxWidth: 600,
+                    minWidth: 200
+                })
+            });
+            $('.vs_addr').live('focus', function(){
+                $(this).css('color','#000000')
+            });
+            $('.vs_add_ok').live('click',function(){
+                var $vstitle = $(this).parent().find('.vs_name').val();
+                var $vsaddr_obj = $(this).parent().find('.vs_addr');
+                var $vsaddr = $vsaddr_obj.val();
+                var $vsid = $(this).parent().find('.vs_id').val();
+                if (isIP($vsaddr)) {
+                    $('.vsources_add_dialog').dialog('close');
+                    for (var $scrip in $srvs) {
+                        $.post($srvs[$scrip]+"vsources/"+$vsid+'/add',{
+                            'vstitle':$vstitle,
+                            'vsaddr':$vsaddr
+                        });
+                    }
+                    $('.vsources_dialog').load($srv+"vsources/");
+                } else {
+                    $vsaddr_obj.css('color','red')
+                }
+            });
+
+        })
+    </script>
+</head>
+<body>
+    <div id="container">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+                <td id="title" style="width: 100%; text-align: center;">Панель настройки видеостены</td>
+                <td><button id="shutdown" style="width: 25px;" title="Выключить всё">X</button></td>
+                <td><button id="vsources" title="Редактирование источников видео">Камеры...</button></td>
+            </tr>
+        </table>
+        <table id="scr_set">
+            <tr>
+                <td class="scr" id="scr11" title="дисплей 1.1"></td>
+                <td class="scr" id="scr12" title="дисплей 1.2"></td>
+                <td class="scr" id="scr13" title="дисплей 1.3"></td>
+            </tr>
+            <tr>
+                <td class="scr" id="scr21" title="дисплей 2.1"></td>
+                <td class="scr" id="scr22" title="дисплей 2.2"></td>
+                <td class="scr" id="scr23" title="дисплей 2.3"></td>
+            </tr>
+        </table>
+    </div>
+
+<div id="lvariants_dialog">{% include 'lvariants.html' %}</div>
+<div class="scr_menu ddmenu"></div>
+<div class="vp_menu ddmenu"></div>
+<div class="vsources_dialog"></div>
+<div class="vsources_add_dialog">
+    <label>id (латиницей)<br/><input class="vs_id"><br/></label>
+    <label>имя (любое для отображения)<br/><input class="vs_name"><br/></label>
+    <label>ip адрес<br/><input class="vs_addr"><br/></label>
+    <button class="vs_add_ok">ок</button>
+</div>
+
+</body>
+</html>
